@@ -1,0 +1,32 @@
+name: House Prices Data Pipeline
+
+on:
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run data pipeline
+        run: python pipeline.py
+
+      - name: Upload outputs as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-results
+          path: |
+            output/*.csv
+            output/*.parquet
+            output/*.json
